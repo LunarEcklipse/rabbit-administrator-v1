@@ -8,3 +8,5 @@ It should be known that this bot is definitely broken in this state as it was ha
 I wouldn't recommend actually using this and it probably doesn't even work to begin with. It's pretty bad code overall, but it (did) work and in its original incarnation only took me the better part of an hour to write and debug. Now that it's a larger project that I'm putting much more time in to, I imagine the next incarnation will be significantly better.
 
 Note that it pulls from .env. If you for some reason want to take the code of this bot and update it to work on your own, you'll need to fill the variables in .env with your own info. You shouldn't need most of the Discord information beyond the bot token, however. They were added there in preparation for something I was going to do with the bot prior to this refactor.
+
+Also note that in many places, data variables and other values have been zeroed out to protect the privacy of the people who interacted with this bot prior to this refactor. I'll add a note where I can, but be aware of that before you try and use it out of the box (if you're insane enough to do so).
