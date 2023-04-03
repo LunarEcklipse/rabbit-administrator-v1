@@ -1,0 +1,94 @@
+Discord_ReactionMessages -- Tracks the message part of reactable role discord messages. Discord_ReactionRoles tracks the per-message components.
+# Reactable_ID TEXT PRIMARY KEY NOT NULL-- The primary key for this. Use UUID4. Used to connect things together.
+# Guild_ID INT NOT NULL -- Discord's Guild ID where the message is contained.
+# Channel_ID INT NOT NULL -- Discord's Channel ID where the message is contained.
+# Message_ID INT NOT NULL -- The ID of the message provided by Discord.
+
+Discord_ReactionRoles -- Tracks the reactable components of the reactable role discord messages.
+# Reactable_ID TEXT NOT NULL-- The primary key of the message used to connect roles to messages.
+# Emoji_Str TEXT NOT NULL -- The string representing the emoji. We can construct the reaction from this.
+# Role_ID INT NOT NULL -- The role associated with this emoji on that message.
+
+Twitch_Streamers -- Tracks the basic information of each Twitch streamer the bot handles, as well as their most recent Stream ID since it's a critical data point. Additional data will get stored in other places.
+# Broadcaster_ID TEXT PRIMARY KEY NOT NULL -- The Broadcaster ID of the streamer. For some reason Twitch serves these as strings so that's what we'll save it as in case they update their standard in the future.
+# Broadcaster_URL TEXT NOT NULL -- The URL for the streamer. Should be something like: https://twitch.tv/broadcaster-here
+# Display_Name TEXT NOT NULL -- The broadcaster's display name.
+# Broadcaster_Type TEXT -- The broadcaster's type. Can be: affiliate — An affiliate broadcaster, partner — A partner broadcaster, or "" — A normal broadcaster
+# Description TEXT -- The broadcaster's description.
+# Profile_Image_URL TEXT -- Profile Image URL. May need to reformat this for the bot's purposes since Twitch does some stuff with it.
+# Channel_Created_Timestamp TEXT -- When the channel was created.
+# Most_Recent_Stream_ID TEXT -- The most recent Stream ID the bot has collected.
+
+Twitch_Game_Info -- Cache for Twitch game information.
+# Game_ID TEXT PRIMARY KEY NOT NULL -- The ID number for the game.
+# Game_Name TEXT NOT NULL -- The name of the game.
+# Box_Art_URL TEXT -- The box art URL for the game.
+# IGDB_ID TEXT -- The IGDB ID for the game. May not need to keep this.
+
+Twitch_Stream_Info -- Tracks stream-specific information of a Twitch streamer. Note that this may be empty, and that indicates the streamer isn't streaming. We store the most recent stream ID elsewhere for a reason.
+# Broadcaster_ID TEXT PRIMARY KEY NOT NULL - The broadcaster's ID. Note this comes from user_id, not ID
+# Stream_ID TEXT - The Stream ID of the stream.
+# Stream_Game_ID TEXT - The Twitch ID of the game being played.
+# Stream_Title TEXT - The title of the Stream.
+# Stream_Viewer_Count INT - The cached viewer count of the Stream.
+# Stream_Started_At TEXT - The time the Stream started at.
+
+Twitch_Stream_Discord_Channel_Updates -- Tracks the information about where to post stream info on Discord.
+# Broadcaster_ID TEXT NOT NULL -- The broadcaster's stream ID. We didn't primary key this so that multiple posts can exist for a single broadcaster if necessary.
+# Discord_Guild_ID INT NOT NULL -- Discord's Guild ID for the update message.
+# Discord_Channel_ID INT NOT NULL -- Discord's Channel ID for the update message.
+# Discord_Role_ID INT -- The Role ID for the update message if there is one. If this is filled, ping this role as part of the message.
+
+Account_Twitch_Connections -- Tracks the discord accounts of streamers and. Neither of these are keyed because one account may pertain to multiple accounts on the other side (e.g. one streamer may have multiple discord accounts, or vice versa)
+# Discord_User_ID INT NOT NULL -- The user ID of the discord user.
+# Twitch_Broadcaster_ID TEXT NOT NULL -- The channel/broadcaster ID of the twitch user.
+
+Account_Speedrun_Connections -- Kept separate for the reasons above.
+# Discord_User_ID INT NOT NULL -- The user ID of the discord user.
+# Speedrun_Dot_Com_ID TEXT NOT NULL -- The user ID of the person on speedrun.com.
+
+Speedrun_Game_Info -- Tracks the core information of a game from speedrun.com
+# Game_ID TEXT PRIMARY KEY NOT NULL -- The game's ID on speedrun.com
+# Game_Name TEXT NOT NULL -- The game's name. Preferably, the international name.
+# Game_Name_Twitch TEXT -- The Twitch name of the game, if there is one.
+# Web_URL TEXT -- The URL for the game on speedrun.com.
+# Release_Date TEXT -- The game's release date on speedrun.com.
+
+Speedrun_Game_Categories -- Tracks the speedrun categories for each game
+# Game_ID TEXT NOT NULL -- The base Game ID.
+# Category_ID TEXT NOT NULL -- The ID of the category.
+# Category_Name TEXT NOT NULL -- The name of the category.
+# Category_Web_URL TEXT -- The category's web link.
+# Is_Miscellaneous INT NOT NULL -- Whether or not the category is considered a misc category.
+
+Speedrun_Game_Levels -- The level information on a per-game basis.
+# Game_ID TEXT NOT NULL -- The base Game ID.
+# Level_ID TEXT NOT NULL -- The level's ID.
+# Level_Name TEXT NOT NULL -- The level's name.
+# Level_Web_URL TEXT -- The weblink to the level.
+
+Speedrun_Game_Leaderboards -- Tracks the individual leaderboard data per game.
+# Leaderboard_ID TEXT PRIMARY KEY NOT NULL -- The leaderboard's ID for tracking runs in another table. This isn't provided so it's a generated UUID.
+# Game_ID TEXT NOT NULL -- The base Game ID.
+# Category_ID TEXT -- The ID of the game's category if it's applicable here.
+# Level_ID TEXT -- The ID of the game's level if it's applicable.
+# Leaderboard_Web_URL TEXT -- The leaderboard URL.
+
+Speedrun_Leaderboard_Runs -- The individual runs for a given leaderboard.
+# Leaderboard_ID TEXT NOT NULL -- The leaderboard ID so we know what leaderboard this run refers to.
+# Leaderboard_Position INT -- The position of this run on the leaderboard.
+# Run_Time TEXT NOT NULL -- The time that the run took. Saved as an ISO 8601 duration string.
+# Runner_ID: TEXT NOT NULL -- The User ID of the person who did the run.
+# Runner_Name: TEXT -- The name of the runner.
+# Run_Comment: TEXT -- The comment attached to the run
+# Is_Run_Verified: INT NOT NULL -- Whether or not the run has been verified.
+# Submission_Date: TEXT -- When the run was actually submitted.
+# Video_Link: TEXT -- A link to the video.
+
+Personal_Speedrun_Information -- Speedrun information not from speedrun.com, but keeps a link.
+# Internal_Run_ID TEXT PRIMARY KEY NOT NULL -- The internal ID for the run. Use UUID.
+# Speedrun_Dot_Com_ID TEXT -- The ID for the run on speedrun.com, if any.
+# Video_Link TEXT -- A link to the video of the run.
+# Runner_ID_Discord TEXT -- The discord ID of the runner.
+# Time TEXT NOT NULL -- The time of the run as an ISO 8601 duration string.
+# Is_PB INT NOT NULL -- Whether or not this run is a personal best.

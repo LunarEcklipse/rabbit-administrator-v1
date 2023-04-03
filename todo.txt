@@ -1,0 +1,13 @@
+1) Finish SQLite setup and rebuild codebase to utilise it.
+2) Separate the role portions of the bot into a separate Pycord Cog.
+3) Set up bot to get speedrun.com data and related Discord commands.
+4) Set up bot to fetch twitch clips. Probably a good idea to learn how pagination works.
+5) Set up bot to get iron bros challenge data.
+6) Set up Flask webservice to deal with interaction endpoints, TOS, and Privacy Policy.
+
+REFERENCE PLACES: 
+
+Twitch Developer Portal: https://dev.twitch.tv/
+Discord Developer Portal: https://discord.com/developers
+Speedrun.com API Reference: https://github.com/speedruncomorg/api
+Iron Bros API Location: https://api.ironbros.gg/rest/runs/leaderboard

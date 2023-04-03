@@ -1,0 +1,13 @@
+[
+    {
+        "GuildID": 0,
+        "ChannelID": 0,
+        "MessageID": 0,
+        "ReactionRoles": [
+            {
+                "Emoji": 0,
+                "RoleID": 0
+            }
+        ]
+    }
+]
